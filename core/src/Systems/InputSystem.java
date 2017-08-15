@@ -57,64 +57,65 @@ public class InputSystem extends EntitySystem{
 			SpeedComponent sp = sm.get(entity);
 			RotationComponent rp = rm.get(entity);
 			
-			
-			float leftInputIntensity = Math.abs(cp.controller.getAxis(leftAxisCodeX)) + Math.abs(cp.controller.getAxis(leftAxisCodeY));
-			
-			//Left Analog Input
-			if(leftInputIntensity > DEADZONE){
-				vp.x = cp.controller.getAxis(leftAxisCodeX) * sp.speed * 10;
-				vp.y = -cp.controller.getAxis(leftAxisCodeY) * sp.speed * 10;
-			}else{
-				vp.x = 0;
-				vp.y = 0;
-			}
-			
-			
-			//Apply Linear Force 
-			bc.body.applyLinearImpulse(new Vector2(vp.x,  vp.y), bc.body.getWorldCenter(), true);
-			bc.body.setAngularVelocity(0);
-			bc.body.resetMassData();
-			
-			
-			// Enable / Disable Rotation
-			if(cp.controller.getButton(4) && cp.rotationLockReleased){
+			if(vp.alive){
 				
-				if(!cp.rotationLocked){
-					
-					rp.joint.setLimits(rp.joint.getJointAngle(), rp.joint.getJointAngle());
-					rp.joint.enableLimit(true);
-					cp.rotationLocked = true;
-					
-					Gdx.app.log("Button Pressed", "Locked");
-					
+				float leftInputIntensity = Math.abs(cp.controller.getAxis(leftAxisCodeX)) + Math.abs(cp.controller.getAxis(leftAxisCodeY));
+				
+				//Left Analog Input
+				if(leftInputIntensity > DEADZONE){
+					vp.x = cp.controller.getAxis(leftAxisCodeX) * sp.speed * 10;
+					vp.y = -cp.controller.getAxis(leftAxisCodeY) * sp.speed * 10;
 				}else{
-					rp.joint.enableLimit(false);
-					cp.rotationLocked = false;
-					Gdx.app.log("Button Pressed", "Unlocked");
+					vp.x = 0;
+					vp.y = 0;
 				}
 				
-				cp.rotationLockReleased = false;
 				
-			}else if(!cp.controller.getButton(4) && !cp.rotationLockReleased){
-				cp.rotationLockReleased = true;
-			}
-			
-			
-			//Dash Attacks
-			float dashInput = cp.controller.getAxis(4);
-			if(Math.abs(dashInput) > .4f && cp.dashReleased){
-				Vector2 dir = bc.sword.getTransform().getOrientation();
-				cp.dashReleased = false;
-				if(dashInput > .4f){
-					bc.body.applyLinearImpulse(new Vector2(dir.x * -sp.stabSpeed, dir.y * -sp.stabSpeed), bc.body.getWorldCenter(), true);
-					Gdx.app.log("ButtonPressed", "Reverse Dash");
-				}else{
-					bc.body.applyLinearImpulse(new Vector2(dir.x * sp.stabSpeed, dir.y * sp.stabSpeed), bc.body.getWorldCenter(), true);
-					Gdx.app.log("ButtonPressed", "Forward Dash");
+				//Apply Linear Force 
+				bc.body.applyLinearImpulse(new Vector2(vp.x,  vp.y), bc.body.getWorldCenter(), true);
+				bc.body.resetMassData();
+				
+				
+				// Enable / Disable Rotation
+				if(cp.controller.getButton(4) && cp.rotationLockReleased){
+					
+					if(!cp.rotationLocked){
+						
+						rp.revoluteJoint.setLimits(rp.revoluteJoint.getJointAngle(), rp.revoluteJoint.getJointAngle());
+						rp.revoluteJoint.enableLimit(true);
+						cp.rotationLocked = true;
+						
+						Gdx.app.log("Button Pressed", "Locked");
+						
+					}else{
+						rp.revoluteJoint.enableLimit(false);
+						cp.rotationLocked = false;
+						Gdx.app.log("Button Pressed", "Unlocked");
+					}
+					
+					cp.rotationLockReleased = false;
+					
+				}else if(!cp.controller.getButton(4) && !cp.rotationLockReleased){
+					cp.rotationLockReleased = true;
 				}
-			}else{
-				if(Math.abs(dashInput) < .2f && !cp.dashReleased){
-					cp.dashReleased = true;
+				
+				
+				//Dash Attacks
+				float dashInput = cp.controller.getAxis(4);
+				if(Math.abs(dashInput) > .4f && cp.dashReleased){
+					Vector2 dir = bc.sword.getTransform().getOrientation();
+					cp.dashReleased = false;
+					if(dashInput > .4f){
+						bc.body.applyLinearImpulse(new Vector2(dir.x * -sp.stabSpeed, dir.y * -sp.stabSpeed), bc.body.getWorldCenter(), true);
+						Gdx.app.log("ButtonPressed", "Reverse Dash");
+					}else{
+						bc.body.applyLinearImpulse(new Vector2(dir.x * sp.stabSpeed, dir.y * sp.stabSpeed), bc.body.getWorldCenter(), true);
+						Gdx.app.log("ButtonPressed", "Forward Dash");
+					}
+				}else{
+					if(Math.abs(dashInput) < .2f && !cp.dashReleased){
+						cp.dashReleased = true;
+					}
 				}
 			}
 			

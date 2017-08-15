@@ -24,7 +24,7 @@ public class PhysicsSystem extends EntitySystem{
 	
 	@Override
 	public void update(float deltaTime) {
-		PhysicsWorld.world.step(Constants.TIME_STEP, Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
+		PhysicsWorld.step();
 	}
 	
 }

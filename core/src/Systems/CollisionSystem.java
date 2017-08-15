@@ -11,14 +11,19 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.joints.WeldJoint;
 
 import Components.BodyComponent;
+import Components.RotationComponent;
+import Components.VelocityComponent;
 import Entities.Player;
 import Worlds.PhysicsWorld;
 
 public class CollisionSystem extends EntitySystem implements ContactListener{
 
 	ComponentMapper<BodyComponent> bm = ComponentMapper.getFor(BodyComponent.class);
+	ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
+	ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
 	
 	ImmutableArray<Entity> entities;
 	
@@ -28,7 +33,7 @@ public class CollisionSystem extends EntitySystem implements ContactListener{
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(BodyComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(BodyComponent.class, VelocityComponent.class, RotationComponent.class).get());
 		PhysicsWorld.world.setContactListener(this);
 	}
 	
@@ -46,9 +51,27 @@ public class CollisionSystem extends EntitySystem implements ContactListener{
 			BodyComponent bc1 = bm.get(a);
 			BodyComponent bc2 = bm.get(b);
 			
+			VelocityComponent vp = vm.get(a);
+			
 			//Check if the collision was between a body and sword
-			if(!bc1.equals(bc2)){
+			if(!bc1.equals(bc2) && bc2.swordFixture != null && bc1.swordFixture != null){
 				if(bc1.swordFixture.equals(f1) && bc2.bodyFixture.equals(f2)){
+					//Disables Movement
+					vp = vm.get(b);
+					
+					
+					if(vp.alive != false){
+						vp.alive = false;
+						RotationComponent rc = rm.get(b);
+						
+						if(rc.weldJoint != null){
+							PhysicsWorld.queueJointDestory(rc.weldJoint);
+							PhysicsWorld.queueFixtureDestory(bc2.sword, bc2.swordFixture);
+							bc2.swordFixture = null;
+							rc.weldJoint = null;
+						}
+					}
+						
 					System.out.println("Stab 1");
 				}else if(bc1.swordFixture.equals(f2) && bc2.bodyFixture.equals(f1)){
 					System.out.println("Stab 2");
@@ -57,9 +80,11 @@ public class CollisionSystem extends EntitySystem implements ContactListener{
 		}
 	}
 
+	
+	//Ending of Stabing
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

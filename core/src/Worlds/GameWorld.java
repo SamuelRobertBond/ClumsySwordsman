@@ -5,13 +5,19 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
 import Entities.Player;
 import Systems.CollisionSystem;
 import Systems.DebugRenderSystem;
+import Systems.GameModeSystem;
 import Systems.InputSystem;
 import Systems.MapRenderingSystem;
 import Systems.PhysicsSystem;
 import Systems.RenderSystem;
+import modes.GameOptions;
+import modes.LastManStanding;
 import utils.Constants;
 import utils.MapUtils;
 import utils.SpawnInformation;
@@ -34,8 +40,11 @@ public class GameWorld {
 		engine.addSystem(new MapRenderingSystem(camera, MapUtils.createMap(Constants.map)));
 		engine.addSystem(new RenderSystem(camera));
 		
+		//Game Systems
+		engine.addSystem(new GameModeSystem(new LastManStanding(new GameOptions())));
+		
 		//Debug Systems
-		//engine.addSystem(new DebugRenderSystem(camera));
+		engine.addSystem(new DebugRenderSystem(camera));
 		
 		players = new LinkedList<Player>();
 		
