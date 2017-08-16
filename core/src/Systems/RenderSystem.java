@@ -1,5 +1,7 @@
 package Systems;
 
+import java.awt.Font;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 import Components.BodyComponent;
+import Components.ScoreComponent;
 import Components.SpriteComponent;
 import utils.Constants;
 
@@ -22,20 +25,22 @@ public class RenderSystem extends EntitySystem{
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	
+	private final float FADE_SPEED = 2f;
+	
 	private ComponentMapper<SpriteComponent> sm = ComponentMapper.getFor(SpriteComponent.class);
 	private ComponentMapper<BodyComponent> bm = ComponentMapper.getFor(BodyComponent.class);
+	private ComponentMapper<ScoreComponent> scm = ComponentMapper.getFor(ScoreComponent.class);
 	
 	public RenderSystem(OrthographicCamera camera) {
 		
 		this.camera = camera;
 		batch = new SpriteBatch();
 		
-		
 	}
 	
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, BodyComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(SpriteComponent.class, BodyComponent.class, ScoreComponent.class).get());
 	}
 	
 	@Override
@@ -43,6 +48,31 @@ public class RenderSystem extends EntitySystem{
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		
+		//Render Scores
+		for(int i = 0; i < entities.size(); ++i){
+			
+			Entity entity = entities.get(i);
+			SpriteComponent sc = sm.get(entity);
+			ScoreComponent scc = scm.get(entity);
+			
+			if(scc.bodiesOccupied == 0){
+				scc.alpha += FADE_SPEED * deltaTime;
+				if(scc.alpha >1){
+					scc.alpha = 1f;
+				}
+				
+			}else{
+				scc.alpha -= FADE_SPEED * deltaTime;
+				if(scc.alpha < .2){
+					scc.alpha = .2f;
+				}
+			}
+			
+			sc.font.setColor(sc.font.getColor().r, sc.font.getColor().g, sc.font.getColor().b, scc.alpha);
+			sc.font.draw(batch, scc.score + "", scc.xpos, scc.ypos);
+			
+		}
 		
 		//Render Swords
 		for(int i = 0; i < entities.size(); ++i){

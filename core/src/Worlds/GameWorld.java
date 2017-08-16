@@ -37,7 +37,7 @@ public class GameWorld {
 		engine.addSystem(new CollisionSystem());
 
 		//Rendering Systems
-		engine.addSystem(new MapRenderingSystem(camera, MapUtils.createMap(Constants.map)));
+		engine.addSystem(new MapRenderingSystem(camera, MapUtils.createMap(Constants.MAP)));
 		engine.addSystem(new RenderSystem(camera));
 		
 		//Game Systems
@@ -53,7 +53,7 @@ public class GameWorld {
 		
 		//Add Entities
 		for(int i = 0; i < Controllers.getControllers().size; ++i){
-			players.add(new Player(info[i].x, info[i].y, info[i].rotation, info[i].texture, Controllers.getControllers().get(i)));
+			players.add(new Player(info[i].x, info[i].y, info[i].rotation, info[i].texture, info[i].color, Controllers.getControllers().get(i)));
 			engine.addEntity(players.get(i));
 			Gdx.app.log("GameWorld", "Added Player");
 		}

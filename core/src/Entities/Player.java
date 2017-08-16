@@ -5,8 +5,13 @@ import java.util.Stack;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -49,6 +54,8 @@ public class Player extends Entity{
 	
 	private final float STAB_SPEED = 30000;
 	
+	private final int FONT_SIZE = 256;
+	
 	private ControllerComponent controllerComponent;
 	private ScoreComponent scoreComponent;
 	
@@ -60,7 +67,7 @@ public class Player extends Entity{
 	private Controller controller;
 	
 	private Stack<Body> bodies;
-	
+	private BitmapFont font;
 	
 	/*
 	 * This is the actor that the player directly controls
@@ -68,17 +75,35 @@ public class Player extends Entity{
 	 * float y - y positionS
 	 * Controller controller - Gamepad that controls the player;
 	 */
-	public Player(float x, float y, float rotation, Texture texture, Controller controller) {
+	public Player(float x, float y, float rotation, Texture texture, Color color, Controller controller) {
 		
+		//Setting Spawn Information
 		this.x = x;
 		this.y= y;
 		this.rotation = rotation;
 		this.texture = texture;
 		this.controller = controller;
 		
+		//Font Generation
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Constants.FONT_FILE);
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		
+		parameter.size = (int) Math.ceil(Gdx.graphics.getWidth() / Constants.V_WIDTH) * FONT_SIZE;
+		
+		parameter.color = color;
+		parameter.genMipMaps = true;
+		
+		//Font
+		font = generator.generateFont(parameter);
+		font.getData().setScale(0.03f);
+		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		//Body Storage
 		bodies = new Stack<Body>();
 		
-		scoreComponent = new ScoreComponent();
+		//Font Body - Used for font dimming
+
+		scoreComponent = new ScoreComponent(x, y, null, null);
 		
 		reset();
 
@@ -92,6 +117,13 @@ public class Player extends Entity{
 			Gdx.app.log("Reseting", "Destroying Bodies");
 			PhysicsWorld.queueBodyDestory(bodies.pop());
 		}
+		
+		//
+		Body fontBody = CollisionUtils.defineBody(x, y, LINEAR_DAMPENING, BodyType.DynamicBody);
+		Fixture fontFixture = CollisionUtils.defineRectangularFixture(RADIUS * ((scoreComponent.score + "").length()), RADIUS, 1, 0, true, fontBody);
+		fontFixture.setUserData(scoreComponent);
+		scoreComponent.body = fontBody;
+		scoreComponent.fontFixture = fontFixture;
 		
 		//Defines the players center body
 		Body centerBody = CollisionUtils.defineBody(x, y, LINEAR_DAMPENING, BodyType.DynamicBody);
@@ -120,16 +152,21 @@ public class Player extends Entity{
 		
 		//Sprite Components
 		Sprite playerSprite = new Sprite(texture);
-		Sprite swordSprite = new Sprite(Constants.swordTexture);
+		Sprite swordSprite = new Sprite(Constants.SWORD_TEXTURE);
+		
 
 		bodies.push(centerBody);
 		bodies.push(rotationBody);
 		bodies.push(sword);
+		bodies.push(fontBody);
 		
 		playerSprite.setScale(PLAYER_SPRITE_SCALE);
 		swordSprite.setScale(SWORD_SPRITE_SCALE_X, SWORD_SPRITE_SCALE_Y);
+		
+		scoreComponent.xpos = x - RADIUS;
+		scoreComponent.ypos = y + RADIUS;
 
-		add(new SpriteComponent(playerSprite, swordSprite));
+		add(new SpriteComponent(playerSprite, swordSprite, font));
 		add(new VelocityComponent());
 		add(new RotationComponent(sword, rotationJoint, weldJoint));
 		add(new SpeedComponent(SPEED, STAB_SPEED));

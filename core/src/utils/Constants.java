@@ -1,7 +1,10 @@
 package utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
@@ -22,34 +25,37 @@ public class Constants {
 	public static final int PPM = 8;
 	
 	//Textures
-	public static final Texture bluePlayerTexture = new Texture(Gdx.files.internal("blue.png"));
-	public static final Texture redPlayerTexture = new Texture(Gdx.files.internal("red.png"));
-	public static final Texture greenPlayerTexture = new Texture(Gdx.files.internal("green.png"));
-	public static final Texture yellowPlayerTexture = new Texture(Gdx.files.internal("yellow.png"));
+	public static final Texture BLUE_PLAYER_TEXTURE = new Texture(Gdx.files.internal("blue.png"));
+	public static final Texture RED_PLAYER_TEXTURE = new Texture(Gdx.files.internal("red.png"));
+	public static final Texture GREEN_PLAYER_TEXTURE = new Texture(Gdx.files.internal("green.png"));
+	public static final Texture YELLOW_PLAYER_TEXTURE = new Texture(Gdx.files.internal("yellow.png"));
 	
-	public static final Texture swordTexture = new Texture(Gdx.files.internal("sword_texture.png"));
+	public static final Texture SWORD_TEXTURE = new Texture(Gdx.files.internal("sword_texture.png"));
 	
 	//Maps
-	public static final TiledMap map = new TmxMapLoader().load("map.tmx");
+	public static final TiledMap MAP = new TmxMapLoader().load("map.tmx");
 	
 	//Map Scale
 	public static final float MAP_SCALE = 1/4f;
 	
-	
+	//Spawn information for the first map
 	public static final SpawnInformation[] spawns = {		
 			
 		//Top Left
-		new SpawnInformation(100/Constants.PPM, 550/Constants.PPM, -80 * MathUtils.degreesToRadians, bluePlayerTexture),
+		new SpawnInformation(100/Constants.PPM, 550/Constants.PPM, -80 * MathUtils.degreesToRadians, Color.BLUE, BLUE_PLAYER_TEXTURE),
 		
 		//Bottom Right
-		new SpawnInformation(550/Constants.PPM, 100/Constants.PPM, 154.5f * MathUtils.degreesToRadians, redPlayerTexture),
+		new SpawnInformation(550/Constants.PPM, 100/Constants.PPM, 154.5f * MathUtils.degreesToRadians, Color.RED, RED_PLAYER_TEXTURE),
 			
 		//Top Right	
-		new SpawnInformation(550/Constants.PPM, 550/Constants.PPM, 200 * MathUtils.degreesToRadians, greenPlayerTexture),
+		new SpawnInformation(550/Constants.PPM, 550/Constants.PPM, 200 * MathUtils.degreesToRadians, Color.GREEN, GREEN_PLAYER_TEXTURE),
 		
 		//Bottom Left
-		new SpawnInformation(100/Constants.PPM, 100/Constants.PPM, 82.5f * MathUtils.degreesToRadians, yellowPlayerTexture),
+		new SpawnInformation(100/Constants.PPM, 100/Constants.PPM, 82.5f * MathUtils.degreesToRadians, Color.YELLOW, YELLOW_PLAYER_TEXTURE),
 		
 		
 	};
+	
+	//Font font
+	public static final FileHandle FONT_FILE = Gdx.files.internal("Tahoma.ttf");
 }
