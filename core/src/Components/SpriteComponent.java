@@ -10,7 +10,6 @@ public class SpriteComponent implements Component{
 	public Sprite swordSprite;
 	public BitmapFont font;
 	
-	
 	public float sword_X;
 	public float sword_Y;
 	public float swordWidth;
