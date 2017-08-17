@@ -56,7 +56,6 @@ public class Player extends Entity{
 	
 	private final int FONT_SIZE = 256;
 	
-	private ControllerComponent controllerComponent;
 	private ScoreComponent scoreComponent;
 	
 	//Spawn Information
@@ -68,6 +67,8 @@ public class Player extends Entity{
 	
 	private Stack<Body> bodies;
 	private BitmapFont font;
+	
+	private Color color;
 	
 	/*
 	 * This is the actor that the player directly controls
@@ -83,6 +84,7 @@ public class Player extends Entity{
 		this.rotation = rotation;
 		this.texture = texture;
 		this.controller = controller;
+		this.color = color;
 		
 		//Font Generation
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Constants.FONT_FILE);
@@ -97,6 +99,8 @@ public class Player extends Entity{
 		font = generator.generateFont(parameter);
 		font.getData().setScale(0.03f);
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		generator.dispose();
 		
 		//Body Storage
 		bodies = new Stack<Body>();
@@ -174,6 +178,14 @@ public class Player extends Entity{
 		add(new ControllerComponent(controller));
 		add(scoreComponent);
 		
+	}
+	
+	public void removeScore(){
+		scoreComponent.renderScore = false;
+	}
+
+	public void dispose() {
+		font.dispose();
 	}
 	
 }

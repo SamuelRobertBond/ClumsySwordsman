@@ -22,6 +22,7 @@ public class ScoreComponent implements Component{
 	public float alpha;
 	
 	public int bodiesOccupied;
+	public boolean renderScore = true;
 	
 	public ScoreComponent(float x, float y, Body fontBody, Fixture fontFixture) {
 		xpos = x;

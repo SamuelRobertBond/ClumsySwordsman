@@ -18,12 +18,12 @@ public class MapRenderingSystem extends EntitySystem{
 	public MapRenderingSystem(OrthographicCamera camera, TiledMap map) {
 		this.renderer = new OrthogonalTiledMapRenderer(map, Constants.MAP_SCALE);
 		this.camera = camera;
-		
 	}
 	
 	@Override
 	public void update(float deltaTime) {
 		renderer.setView(camera);
+		renderer.getBatch().setProjectionMatrix(camera.combined);
 		renderer.render();
 		
 		if(Gdx.input.isKeyPressed(Keys.RIGHT)){
@@ -55,6 +55,10 @@ public class MapRenderingSystem extends EntitySystem{
 		
 		camera.update();
 		
+	}
+	
+	public void dispose(){
+		renderer.dispose();
 	}
 
 }

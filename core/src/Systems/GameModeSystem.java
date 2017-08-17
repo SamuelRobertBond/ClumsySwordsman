@@ -48,17 +48,16 @@ public class GameModeSystem extends EntitySystem{
 			//Check if the game should end
 			if(mode.endGame()){
 				
-				//End Game
-				Gdx.app.log("Game Mode System:", "End Game");
+				//Takes care of screen switching in the game mode
 				
 			}
 			//If it shouldn't end queue to reset the players
 			else{
-				Timer timer = new Timer();
 				
 				Gdx.app.log("Game Mode System", "Setting reset timer");
 				
 				for(int i = 0; i < entities.size(); ++i){
+					Timer timer = new Timer();
 					timer.scheduleTask(new Task(){
 
 						@Override

@@ -56,21 +56,23 @@ public class RenderSystem extends EntitySystem{
 			SpriteComponent sc = sm.get(entity);
 			ScoreComponent scc = scm.get(entity);
 			
-			if(scc.bodiesOccupied == 0){
-				scc.alpha += FADE_SPEED * deltaTime;
-				if(scc.alpha >1){
-					scc.alpha = 1f;
+			if(scc.renderScore){
+				if(scc.bodiesOccupied == 0){
+					scc.alpha += FADE_SPEED * deltaTime;
+					if(scc.alpha >1){
+						scc.alpha = 1f;
+					}
+					
+				}else{
+					scc.alpha -= FADE_SPEED * deltaTime;
+					if(scc.alpha < .2){
+						scc.alpha = .2f;
+					}
 				}
 				
-			}else{
-				scc.alpha -= FADE_SPEED * deltaTime;
-				if(scc.alpha < .2){
-					scc.alpha = .2f;
-				}
+				sc.font.setColor(sc.font.getColor().r, sc.font.getColor().g, sc.font.getColor().b, scc.alpha);
+				sc.font.draw(batch, scc.score + "", scc.xpos, scc.ypos);
 			}
-			
-			sc.font.setColor(sc.font.getColor().r, sc.font.getColor().g, sc.font.getColor().b, scc.alpha);
-			sc.font.draw(batch, scc.score + "", scc.xpos, scc.ypos);
 			
 		}
 		
@@ -117,6 +119,10 @@ public class RenderSystem extends EntitySystem{
 		
 		batch.end();
 		
+	}
+	
+	public void dispose(){
+		batch.dispose();
 	}
 	
 }

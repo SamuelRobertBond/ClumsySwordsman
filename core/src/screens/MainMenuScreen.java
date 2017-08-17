@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MagnetGame;
 
@@ -28,7 +29,7 @@ import utils.Constants;
 public class MainMenuScreen implements Screen{
 
 	private MagnetGame game;
-	private StretchViewport view;
+	private FitViewport view;
 	
 	//Stage stuff
 	private Stage stage;
@@ -40,7 +41,7 @@ public class MainMenuScreen implements Screen{
 		this.game = game;
 		
 		//Stage generation
-		view = new StretchViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
+		view = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
 		stage = new Stage(view);
 		table = new Table();
 		table.setFillParent(true);
@@ -78,7 +79,6 @@ public class MainMenuScreen implements Screen{
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				startGame();
-				super.clicked(event, x, y);
 			}
 		});
 		
@@ -128,7 +128,6 @@ public class MainMenuScreen implements Screen{
 	@Override
 	public void dispose() {
 		stage.dispose();
-		skin.dispose();
 		font.dispose();
 	}
 	
@@ -155,6 +154,7 @@ public class MainMenuScreen implements Screen{
 	}
 	
 	private void startGame(){
-		game.setScreen(new GameScreen(game));
+		this.dispose();
+		game.setScreen(new SelectScreen(game));
 	}
 }

@@ -1,13 +1,20 @@
 package screens;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MagnetGame;
 
 import Worlds.GameWorld;
+import modes.GameOptions;
+import modes.LastManStanding;
 import utils.Constants;
 
 public class GameScreen implements Screen{
@@ -15,11 +22,14 @@ public class GameScreen implements Screen{
 	private MagnetGame game;
 	private GameWorld world;
 	private OrthographicCamera camera;
+	private FitViewport view;
 	
-	public GameScreen(MagnetGame game) {
+	public GameScreen(MagnetGame game, LinkedList<Controller> controllers) {
 		
 		this.game = game;
 		this.camera = new OrthographicCamera(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM);
+		this.view = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM);
+		view.apply();
 		
 		camera.zoom = .8f;
 		camera.position.x = 40;
@@ -27,7 +37,8 @@ public class GameScreen implements Screen{
 		
 		camera.update();
 		
-		world = new GameWorld(camera);
+		world = new GameWorld(new LastManStanding(game, new GameOptions(game)), camera, Constants.MAP);
+		world.addPlayers(controllers);
 		
 	}
 	
@@ -48,7 +59,8 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		view.update(width, height);
+		camera.combined.set(view.getCamera().combined);
 		
 	}
 
@@ -72,8 +84,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		world.dispose();
 	}
 
 }

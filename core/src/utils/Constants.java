@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader.Parameters;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -33,7 +35,19 @@ public class Constants {
 	public static final Texture SWORD_TEXTURE = new Texture(Gdx.files.internal("sword_texture.png"));
 	
 	//Maps
-	public static final TiledMap MAP = new TmxMapLoader().load("map.tmx");
+	public static TiledMap MAP;
+	public static TiledMap SELECTION_MAP;
+	
+	public static void loadMaps(){
+		TmxMapLoader loader = new TmxMapLoader();
+		Parameters params = new Parameters();
+		
+		params.textureMinFilter = TextureFilter.Nearest;
+		params.textureMagFilter = TextureFilter.Nearest;
+		
+		SELECTION_MAP = loader.load("selection.tmx", params);
+		MAP = loader.load("map.tmx", params);
+	}
 	
 	//Map Scale
 	public static final float MAP_SCALE = 1/4f;

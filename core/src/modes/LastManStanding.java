@@ -4,10 +4,14 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+import com.mygdx.game.MagnetGame;
 
 import Components.ScoreComponent;
 import Components.VelocityComponent;
 import Entities.Player;
+import screens.SelectScreen;
 
 public class LastManStanding implements GameMode{
 
@@ -17,7 +21,10 @@ public class LastManStanding implements GameMode{
 	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 	private ComponentMapper<ScoreComponent> sm = ComponentMapper.getFor(ScoreComponent.class);
 	
-	public LastManStanding(GameOptions options) {
+	private MagnetGame game;
+	
+	public LastManStanding(MagnetGame game, GameOptions options) {
+		this.game = game;
 		this.options = options;
 	}
 	
@@ -57,6 +64,10 @@ public class LastManStanding implements GameMode{
 			ScoreComponent sc = sm.get(entities.get(i));
 			if(vc.alive){
 				++sc.score;
+				
+				if(sc.score > highestScore){
+					highestScore = sc.score;
+				}
 			}
 		}
 		
@@ -66,6 +77,19 @@ public class LastManStanding implements GameMode{
 	@Override
 	public boolean endGame() {
 		if(highestScore >= options.rounds){
+			
+			Timer timer = new Timer();
+			timer.scheduleTask(new Task(){
+
+				@Override
+				public void run() {
+					game.getScreen().dispose();
+					options.game.setScreen(new SelectScreen(options.game));
+				}
+				
+			}, 4);
+			
+			
 			return true;
 		}
 		return false;
