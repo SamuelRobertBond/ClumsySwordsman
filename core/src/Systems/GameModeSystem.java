@@ -1,19 +1,19 @@
 package Systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
 import Components.ScoreComponent;
 import Components.VelocityComponent;
 import modes.GameMode;
-import modes.GameOptions;
+import utils.Constants;
 
 public class GameModeSystem extends EntitySystem{
 
@@ -21,11 +21,13 @@ public class GameModeSystem extends EntitySystem{
 	private GameMode mode;
 	private ImmutableArray<Entity> entities;
 	private final float RESET_DELAY = 3f;
+	private Sound clapping;
 	
 	//Add game options as well
 	public GameModeSystem(GameMode mode) {
 		this.mode = mode;
 		this.roundEnding = false;
+		clapping = Gdx.audio.newSound(Constants.CLAPPING);
 	}
 	
 	@Override
@@ -41,6 +43,8 @@ public class GameModeSystem extends EntitySystem{
 		if(mode.endRound(entities) && !roundEnding){
 			
 			roundEnding = true;
+			
+			clapping.play();
 			
 			//Assess scores
 			mode.addScore(entities);
@@ -72,6 +76,10 @@ public class GameModeSystem extends EntitySystem{
 			
 		}
 		
+	}
+	
+	public void dispose(){
+		clapping.dispose();
 	}
 	
 }

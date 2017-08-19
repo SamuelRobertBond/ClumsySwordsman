@@ -27,12 +27,12 @@ public class Constants {
 	public static final int PPM = 8;
 	
 	//Textures
-	public static final Texture BLUE_PLAYER_TEXTURE = new Texture(Gdx.files.internal("blue.png"));
-	public static final Texture RED_PLAYER_TEXTURE = new Texture(Gdx.files.internal("red.png"));
-	public static final Texture GREEN_PLAYER_TEXTURE = new Texture(Gdx.files.internal("green.png"));
-	public static final Texture YELLOW_PLAYER_TEXTURE = new Texture(Gdx.files.internal("yellow.png"));
+	public static final Texture BLUE_PLAYER_TEXTURE = new Texture(Gdx.files.internal("Textures/blue.png"));
+	public static final Texture RED_PLAYER_TEXTURE = new Texture(Gdx.files.internal("Textures/red.png"));
+	public static final Texture GREEN_PLAYER_TEXTURE = new Texture(Gdx.files.internal("Textures/green.png"));
+	public static final Texture YELLOW_PLAYER_TEXTURE = new Texture(Gdx.files.internal("Textures/yellow.png"));
 	
-	public static final Texture SWORD_TEXTURE = new Texture(Gdx.files.internal("sword_texture.png"));
+	public static final Texture SWORD_TEXTURE = new Texture(Gdx.files.internal("Textures/sword_texture.png"));
 	
 	//Maps
 	public static TiledMap MAP;
@@ -45,8 +45,8 @@ public class Constants {
 		params.textureMinFilter = TextureFilter.Nearest;
 		params.textureMagFilter = TextureFilter.Nearest;
 		
-		SELECTION_MAP = loader.load("selection.tmx", params);
-		MAP = loader.load("map.tmx", params);
+		SELECTION_MAP = loader.load("Maps/selection.tmx", params);
+		MAP = loader.load("Maps/map.tmx", params);
 	}
 	
 	//Map Scale
@@ -71,5 +71,12 @@ public class Constants {
 	};
 	
 	//Font font
-	public static final FileHandle FONT_FILE = Gdx.files.internal("Tahoma.ttf");
+	public static final FileHandle FONT_FILE = Gdx.files.internal("Fonts/Tahoma.ttf");
+	
+	
+	//Sounds Handles
+	public static final FileHandle CLAPPING = Gdx.files.internal("Sounds/clapping.wav");
+	public static final FileHandle BEEP = Gdx.files.internal("Sounds/beep.wav");
+	public static final FileHandle WHOOSH = Gdx.files.internal("Sounds/Whoosh.wav");
+	
 }

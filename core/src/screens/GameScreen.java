@@ -7,8 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MagnetGame;
 
@@ -23,6 +23,7 @@ public class GameScreen implements Screen{
 	private GameWorld world;
 	private OrthographicCamera camera;
 	private FitViewport view;
+	private Stage stage;
 	
 	public GameScreen(MagnetGame game, LinkedList<Controller> controllers) {
 		
@@ -31,13 +32,22 @@ public class GameScreen implements Screen{
 		this.view = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM);
 		view.apply();
 		
+		
+		//Stage information
+		stage = new Stage(view);
+		Table table = new Table();
+		table.setFillParent(true);
+		Gdx.input.setInputProcessor(stage);
+		
+		stage.addActor(table);
+		
 		camera.zoom = .8f;
 		camera.position.x = 40;
 		camera.position.y = 40;
 		
 		camera.update();
 		
-		world = new GameWorld(new LastManStanding(game, new GameOptions(game)), camera, Constants.MAP);
+		world = new GameWorld(new LastManStanding(game, new GameOptions()), camera, Constants.MAP);
 		world.addPlayers(controllers);
 		
 	}
@@ -54,6 +64,8 @@ public class GameScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         world.update(delta);
+        stage.act(delta);
+        stage.draw();
 		
 	}
 
@@ -85,6 +97,7 @@ public class GameScreen implements Screen{
 	@Override
 	public void dispose() {
 		world.dispose();
+		stage.dispose();
 	}
 
 }

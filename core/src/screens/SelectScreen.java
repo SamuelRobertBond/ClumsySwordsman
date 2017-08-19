@@ -31,6 +31,7 @@ import com.mygdx.game.MagnetGame;
 import Entities.Player;
 import Worlds.GameWorld;
 import modes.GameMode;
+import modes.GameOptions;
 import modes.SelectMode;
 import utils.Constants;
 
@@ -71,7 +72,7 @@ public class SelectScreen implements Screen{
 		
 		camera.update();
 		
-		world = new GameWorld(new SelectMode(), camera, Constants.SELECTION_MAP);
+		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, Constants.SELECTION_MAP);
 		players = new LinkedList<Player>();
 		controllers = new LinkedList<Controller>();
 		

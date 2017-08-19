@@ -7,9 +7,12 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import Components.BodyComponent;
 import Components.ControllerComponent;
@@ -17,10 +20,12 @@ import Components.RotationComponent;
 import Components.SpeedComponent;
 import Components.VelocityComponent;
 import net.dermetfan.gdx.math.MathUtils;
+import utils.Constants;
 
 public class InputSystem extends EntitySystem{
 
 	private final float DEADZONE = .3f;
+	private final float DASH_RECHARGE = .5f;
 	
 	private ImmutableArray<Entity> entities;
 	
@@ -30,9 +35,11 @@ public class InputSystem extends EntitySystem{
 	private ComponentMapper<SpeedComponent> sm = ComponentMapper.getFor(SpeedComponent.class);
 	private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
 	
+	private Sound whoosh;
+	private Timer timer;
 	
 	public InputSystem() {
-		
+		whoosh = Gdx.audio.newSound(Constants.WHOOSH);
 	}
 	
 	public void addedToEngine(Engine engine){
@@ -76,8 +83,10 @@ public class InputSystem extends EntitySystem{
 				bc.body.resetMassData();
 				
 				
+				//I disabled rotation lock to test if the game is more fun without it
+				
 				// Enable / Disable Rotation
-				if(cp.controller.getButton(4) && cp.rotationLockReleased){
+				/*if(cp.controller.getButton(4) && cp.rotationLockReleased){
 					
 					if(!cp.rotationLocked){
 						
@@ -97,14 +106,20 @@ public class InputSystem extends EntitySystem{
 					
 				}else if(!cp.controller.getButton(4) && !cp.rotationLockReleased){
 					cp.rotationLockReleased = true;
-				}
+				}*/
 				
 				
 				//Dash Attacks
 				float dashInput = cp.controller.getAxis(4);
-				if(Math.abs(dashInput) > .4f && cp.dashReleased){
+				if(Math.abs(dashInput) > .4f && cp.dashReleased && cp.canDash){
+					
 					Vector2 dir = bc.sword.getTransform().getOrientation();
 					cp.dashReleased = false;
+					cp.canDash = false;
+					cp.scheduleDash(DASH_RECHARGE);
+					
+					whoosh.play();
+					
 					if(dashInput > .4f){
 						bc.body.applyLinearImpulse(new Vector2(dir.x * -sp.stabSpeed, dir.y * -sp.stabSpeed), bc.body.getWorldCenter(), true);
 						Gdx.app.log("ButtonPressed", "Reverse Dash");
@@ -112,6 +127,8 @@ public class InputSystem extends EntitySystem{
 						bc.body.applyLinearImpulse(new Vector2(dir.x * sp.stabSpeed, dir.y * sp.stabSpeed), bc.body.getWorldCenter(), true);
 						Gdx.app.log("ButtonPressed", "Forward Dash");
 					}
+					
+					
 				}else{
 					if(Math.abs(dashInput) < .2f && !cp.dashReleased){
 						cp.dashReleased = true;
@@ -123,4 +140,7 @@ public class InputSystem extends EntitySystem{
 		
 	}
 	
+	public void dispose(){
+		whoosh.dispose();
+	}
 }

@@ -2,16 +2,16 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,8 +20,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.MagnetGame;
 
 import utils.Constants;
@@ -36,9 +37,18 @@ public class MainMenuScreen implements Screen{
 	private Table table;
 	private BitmapFont font;
 	private Skin skin;
+	private int menuPosition;
+	private TextButton buttons[];
+	private Timer timer;
+	private Sound beep;
+	
+	boolean checkControllers;
 	
 	public MainMenuScreen(MagnetGame game) {
+		
 		this.game = game;
+		this.menuPosition = 0;
+		this.checkControllers = true;
 		
 		//Stage generation
 		view = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
@@ -69,6 +79,11 @@ public class MainMenuScreen implements Screen{
 		TextButton play = new TextButton("Play", skin);
 		TextButton exit = new TextButton("Exit", skin);
 		
+		buttons = new TextButton[2];
+		buttons[0] = play;
+		buttons[1] = exit;
+		
+		
 		table.add(title);
 		table.row();
 		table.add(play).padBottom(50).padTop(200);
@@ -83,6 +98,9 @@ public class MainMenuScreen implements Screen{
 		});
 		
 		stage.addActor(table);
+		
+		timer = new Timer();
+		beep = Gdx.audio.newSound(Constants.BEEP);
 	}
 	
 	@Override
@@ -96,6 +114,11 @@ public class MainMenuScreen implements Screen{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+        //Adjust Menu Position
+        if(checkController()){
+            adjustMenu();
+        }
+
         stage.act(delta);
         stage.draw();
         
@@ -129,6 +152,7 @@ public class MainMenuScreen implements Screen{
 	public void dispose() {
 		stage.dispose();
 		font.dispose();
+		beep.dispose();
 	}
 	
 	private Skin createBasicSkin(BitmapFont font){
@@ -156,5 +180,82 @@ public class MainMenuScreen implements Screen{
 	private void startGame(){
 		this.dispose();
 		game.setScreen(new SelectScreen(game));
+	}
+	
+	private boolean checkController(){
+		
+		if(checkControllers){
+			
+			for(Controller controller : Controllers.getControllers()){
+				
+				if(controller.getButton(0)){
+					
+					if(menuPosition == 0){
+						startGame();
+					}else if(menuPosition == 1){
+						Gdx.app.exit();
+					}
+				}
+				
+				
+				//Checks if the button should be adujusted and changes the menu position 
+				if(controller.getAxis(0) < -.5f){
+					
+					++menuPosition;
+					beep.play();
+					
+					if(menuPosition > 1){
+						menuPosition = 0;
+					}
+					
+					checkControllers = false;
+					timer.scheduleTask(new Task(){
+						
+						@Override
+						public void run() {
+							checkControllers = true;
+						}
+					}, .35f);
+					
+					return true;
+					
+				}else if(controller.getAxis(0) > .5f){
+					
+					--menuPosition;
+					beep.play();
+					
+					if(menuPosition < 0){
+						menuPosition = 1;
+					}
+					
+					checkControllers = false;
+					timer.scheduleTask(new Task(){
+						
+						@Override
+						public void run() {
+							checkControllers = true;
+						}
+					}, .35f);
+					
+					return true;
+				}
+				
+			}
+			
+			return false;
+		}
+		
+		return false;
+		
+	}
+
+	private void adjustMenu(){
+		for(int i = 0; i < buttons.length; ++i){
+			if(menuPosition == i){
+				buttons[i].setColor(Color.DARK_GRAY);
+			}else{
+				buttons[i].setColor(Color.GRAY);
+			}
+		}
 	}
 }

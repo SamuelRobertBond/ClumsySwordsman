@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 600;
 		config.height = 600;
+		config.fullscreen = false;
 		new LwjglApplication(new MagnetGame(), config);
 	}
 }

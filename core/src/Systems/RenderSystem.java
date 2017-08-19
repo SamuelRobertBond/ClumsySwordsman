@@ -1,14 +1,11 @@
 package Systems;
 
-import java.awt.Font;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,7 +13,6 @@ import com.badlogic.gdx.math.MathUtils;
 import Components.BodyComponent;
 import Components.ScoreComponent;
 import Components.SpriteComponent;
-import utils.Constants;
 
 public class RenderSystem extends EntitySystem{
 

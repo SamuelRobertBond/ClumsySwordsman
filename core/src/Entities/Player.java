@@ -90,7 +90,7 @@ public class Player extends Entity{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Constants.FONT_FILE);
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		
-		parameter.size = (int) Math.ceil(Gdx.graphics.getWidth() / Constants.V_WIDTH) * FONT_SIZE;
+		parameter.size = FONT_SIZE;
 		
 		parameter.color = color;
 		parameter.genMipMaps = true;
