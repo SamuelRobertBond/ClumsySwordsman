@@ -118,7 +118,7 @@ public class InputSystem extends EntitySystem{
 					cp.canDash = false;
 					cp.scheduleDash(DASH_RECHARGE);
 					
-					whoosh.play();
+					whoosh.play(.5f);
 					
 					if(dashInput > .4f){
 						bc.body.applyLinearImpulse(new Vector2(dir.x * -sp.stabSpeed, dir.y * -sp.stabSpeed), bc.body.getWorldCenter(), true);

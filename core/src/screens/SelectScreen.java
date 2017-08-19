@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
@@ -58,6 +59,8 @@ public class SelectScreen implements Screen{
 	private final String joinText = "Press A to Join";
 	private final String startText = "Press START to Begin";
 	
+	private final Sound sound;
+	
 	
 	public SelectScreen(MagnetGame game) {
 		
@@ -75,6 +78,8 @@ public class SelectScreen implements Screen{
 		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, Constants.SELECTION_MAP);
 		players = new LinkedList<Player>();
 		controllers = new LinkedList<Controller>();
+		
+		sound = Gdx.audio.newSound(Constants.BEEP_JOIN);
 		
 		
 		//Font
@@ -161,6 +166,7 @@ public class SelectScreen implements Screen{
 		world.dispose();
 		stage.dispose();
 		font.dispose();
+		sound.dispose();
 	}
 	
 	
@@ -180,6 +186,7 @@ public class SelectScreen implements Screen{
 				controllers.add(controller);
 				Player player = world.addPlayer(controller, controllers.size() - 1);
 				player.removeScore();
+				sound.play();
 			}
 		}
 		

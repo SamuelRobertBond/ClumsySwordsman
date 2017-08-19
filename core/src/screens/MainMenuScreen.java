@@ -1,6 +1,7 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.controllers.Controller;
@@ -77,16 +78,20 @@ public class MainMenuScreen implements Screen{
 		
 		//Buttons
 		TextButton play = new TextButton("Play", skin);
+		TextButton fullscreen = new TextButton("Full", skin);
 		TextButton exit = new TextButton("Exit", skin);
 		
-		buttons = new TextButton[2];
+		buttons = new TextButton[3];
 		buttons[0] = play;
-		buttons[1] = exit;
+		buttons[1] = fullscreen;
+		buttons[2] = exit;
 		
 		
 		table.add(title);
 		table.row();
 		table.add(play).padBottom(50).padTop(200);
+		table.row();
+		table.add(fullscreen).padBottom(50);
 		table.row();
 		table.add(exit);
 		
@@ -188,23 +193,33 @@ public class MainMenuScreen implements Screen{
 			
 			for(Controller controller : Controllers.getControllers()){
 				
+				
+				// If select button is pressed
 				if(controller.getButton(0)){
 					
 					if(menuPosition == 0){
 						startGame();
 					}else if(menuPosition == 1){
+						if(!Gdx.graphics.isFullscreen()){
+							Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+							buttons[menuPosition].setText("Windowed");
+						}else{
+							Gdx.graphics.setWindowedMode(800, 800);
+							buttons[menuPosition].setText("Full");
+						}
+					}else if(menuPosition == 2){
 						Gdx.app.exit();
 					}
 				}
 				
 				
-				//Checks if the button should be adujusted and changes the menu position 
-				if(controller.getAxis(0) < -.5f){
+				//Checks if the button should be adjusted and changes the menu position 
+				if(controller.getAxis(0) > .5f){
 					
 					++menuPosition;
 					beep.play();
 					
-					if(menuPosition > 1){
+					if(menuPosition >= buttons.length){
 						menuPosition = 0;
 					}
 					
@@ -219,13 +234,13 @@ public class MainMenuScreen implements Screen{
 					
 					return true;
 					
-				}else if(controller.getAxis(0) > .5f){
+				}else if(controller.getAxis(0) < -.5f){
 					
 					--menuPosition;
 					beep.play();
 					
 					if(menuPosition < 0){
-						menuPosition = 1;
+						menuPosition = buttons.length - 1;
 					}
 					
 					checkControllers = false;

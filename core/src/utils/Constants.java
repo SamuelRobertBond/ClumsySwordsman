@@ -77,6 +77,7 @@ public class Constants {
 	//Sounds Handles
 	public static final FileHandle CLAPPING = Gdx.files.internal("Sounds/clapping.wav");
 	public static final FileHandle BEEP = Gdx.files.internal("Sounds/beep.wav");
+	public static final FileHandle BEEP_JOIN = Gdx.files.internal("Sounds/beep2.wav");
 	public static final FileHandle WHOOSH = Gdx.files.internal("Sounds/Whoosh.wav");
 	
 }
