@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -32,6 +33,7 @@ public class GameScreen implements Screen{
 		this.view = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM);
 		view.apply();
 		
+		;
 		
 		//Stage information
 		stage = new Stage(view);
@@ -47,7 +49,7 @@ public class GameScreen implements Screen{
 		
 		camera.update();
 		
-		world = new GameWorld(new LastManStanding(game, new GameOptions()), camera, Constants.MAP);
+		world = new GameWorld(new LastManStanding(game, new GameOptions()), camera, Constants.loadMap(MathUtils.random((Constants.MAP_COUNT - 1)) + 1));
 		world.addPlayers(controllers);
 		
 	}

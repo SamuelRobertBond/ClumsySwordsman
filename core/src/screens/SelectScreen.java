@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -69,13 +70,15 @@ public class SelectScreen implements Screen{
 		this.view = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM);
 		view.apply();
 		
-		camera.zoom = .8f;
+		camera.zoom = .85f;
 		camera.position.x = 40;
 		camera.position.y = 40;
 		
 		camera.update();
 		
-		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, Constants.SELECTION_MAP);
+		Constants.loadMap(0);
+		
+		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, Constants.loadMap(0));
 		players = new LinkedList<Player>();
 		controllers = new LinkedList<Controller>();
 		
@@ -117,7 +120,7 @@ public class SelectScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         world.update(delta);

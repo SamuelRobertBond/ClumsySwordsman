@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import Entities.Player;
 import Systems.CollisionSystem;
+import Systems.DebugRenderSystem;
 import Systems.GameModeSystem;
 import Systems.InputSystem;
 import Systems.MapRenderingSystem;

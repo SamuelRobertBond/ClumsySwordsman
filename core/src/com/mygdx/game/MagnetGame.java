@@ -11,7 +11,6 @@ public class MagnetGame extends Game{
 
 	@Override
 	public void create() {
-		Constants.loadMaps();
 		setScreen(new MainMenuScreen(this));
 		
 	}

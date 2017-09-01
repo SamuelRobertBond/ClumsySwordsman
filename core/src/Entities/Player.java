@@ -34,8 +34,8 @@ public class Player extends Entity{
 	
 	private final float SCALE = 1.4f;
 	private final float PLAYER_SPRITE_SCALE = .034f * SCALE;
-	private final float SWORD_SPRITE_SCALE_X = .05f * SCALE;
-	private final float SWORD_SPRITE_SCALE_Y = .25f * SCALE;
+	private final float SWORD_SPRITE_SCALE_X = .07f * SCALE;
+	private final float SWORD_SPRITE_SCALE_Y = .085f * SCALE;
 	
 	private final float RADIUS = 2f * SCALE;
 	private final float SPEED = 100f * SCALE;

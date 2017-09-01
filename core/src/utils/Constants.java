@@ -1,16 +1,15 @@
 package utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader.Parameters;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
@@ -19,7 +18,7 @@ public class Constants {
 	public static final float TIME_STEP = 1/45f;
 	public static final int VELOCITY_ITERATIONS = 6;
 	public static final int POSITION_ITERATIONS = 2;
-	
+
 	
 	//Camera Constants
 	public static final float V_WIDTH = 800;
@@ -35,18 +34,26 @@ public class Constants {
 	public static final Texture SWORD_TEXTURE = new Texture(Gdx.files.internal("Textures/sword_texture.png"));
 	
 	//Maps
-	public static TiledMap MAP;
-	public static TiledMap SELECTION_MAP;
 	
-	public static void loadMaps(){
+	public static TiledMap loadMap(int mapIndex){
+		
+		TiledMap MAP = null;
 		TmxMapLoader loader = new TmxMapLoader();
 		Parameters params = new Parameters();
 		
 		params.textureMinFilter = TextureFilter.Nearest;
 		params.textureMagFilter = TextureFilter.Nearest;
 		
-		SELECTION_MAP = loader.load("Maps/selection.tmx", params);
-		MAP = loader.load("Maps/map.tmx", params);
+		if(mapIndex == 0){
+			MAP = loader.load("Maps/selection.tmx", params);
+		}else if(mapIndex == 1){
+			MAP = loader.load("Maps/map_1.tmx", params);
+		}else if(mapIndex == 2){
+			MAP = loader.load("Maps/map_2.tmx", params);
+		}
+		
+		return MAP;
+
 	}
 	
 	//Map Scale
@@ -78,6 +85,7 @@ public class Constants {
 	public static final FileHandle CLAPPING = Gdx.files.internal("Sounds/clapping.wav");
 	public static final FileHandle BEEP = Gdx.files.internal("Sounds/beep.wav");
 	public static final FileHandle BEEP_JOIN = Gdx.files.internal("Sounds/beep2.wav");
-	public static final FileHandle WHOOSH = Gdx.files.internal("Sounds/Whoosh.wav");
+	public static final Sound WHOOSH = Gdx.audio.newSound(Gdx.files.internal("Sounds/whoosh.wav"));
+	public static final int MAP_COUNT = 2;
 	
 }

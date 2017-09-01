@@ -12,9 +12,6 @@ public class MapUtils {
 
 	public static TiledMap createMap(TiledMap map){
 		
-		//Get The Tile Size
-		float tileSize = ((TiledMapTileLayer)map.getLayers().get("Floor")).getTileWidth();
-		
 		MapLayer walls =  map.getLayers().get("Walls");
 		
 		
@@ -32,10 +29,11 @@ public class MapUtils {
 			System.out.println("-----------------------");
 			
 			//Calculates the values on an 800 x 800 grid
-			x *= Constants.MAP_SCALE;
-			y *= Constants.MAP_SCALE;
-			width *= Constants.MAP_SCALE;
-			height *= Constants.MAP_SCALE;
+			width = width/2 * Constants.MAP_SCALE;
+			height = height/2 * Constants.MAP_SCALE;
+			x = x * Constants.MAP_SCALE + width;
+			y = y * Constants.MAP_SCALE + height;
+
 			
 			Body body = CollisionUtils.defineBody(x , y, 0, BodyType.StaticBody);
 			CollisionUtils.defineRectangularFixture(width, height, 1, 0, false, body);

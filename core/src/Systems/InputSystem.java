@@ -35,11 +35,9 @@ public class InputSystem extends EntitySystem{
 	private ComponentMapper<SpeedComponent> sm = ComponentMapper.getFor(SpeedComponent.class);
 	private ComponentMapper<RotationComponent> rm = ComponentMapper.getFor(RotationComponent.class);
 	
-	private Sound whoosh;
 	private Timer timer;
 	
 	public InputSystem() {
-		whoosh = Gdx.audio.newSound(Constants.WHOOSH);
 	}
 	
 	public void addedToEngine(Engine engine){
@@ -118,7 +116,7 @@ public class InputSystem extends EntitySystem{
 					cp.canDash = false;
 					cp.scheduleDash(DASH_RECHARGE);
 					
-					whoosh.play(.5f);
+					Constants.WHOOSH.play(.5f);
 					
 					if(dashInput > .4f){
 						bc.body.applyLinearImpulse(new Vector2(dir.x * -sp.stabSpeed, dir.y * -sp.stabSpeed), bc.body.getWorldCenter(), true);
@@ -141,6 +139,6 @@ public class InputSystem extends EntitySystem{
 	}
 	
 	public void dispose(){
-		whoosh.dispose();
+		
 	}
 }
