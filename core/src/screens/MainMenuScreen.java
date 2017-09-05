@@ -2,115 +2,83 @@ package screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MagnetGame;
 
 import utils.Constants;
+import utils.MenuManager;
 
 public class MainMenuScreen implements Screen{
 
 	private MagnetGame game;
+	private MenuManager menu;
 	private FitViewport view;
 	
-	//Stage stuff
-	private Stage stage;
-	private Table table;
-	private BitmapFont font;
-	private Skin skin;
-	private int menuPosition;
-	private TextButton buttons[];
-	private Timer timer;
-	private Sound beep;
-	
-	boolean checkControllers;
-	
+
 	public MainMenuScreen(MagnetGame game) {
 		
 		this.game = game;
-		this.menuPosition = 0;
-		this.checkControllers = true;
-		
-		//Stage generation
 		view = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT);
-		stage = new Stage(view);
-		table = new Table();
-		table.setFillParent(true);
 		
-		
-		//Debug
-		//table.setDebug(true);
-		
-		Gdx.input.setInputProcessor(stage);
-		
-		//Font
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Constants.FONT_FILE);
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 64;
-		font = generator.generateFont(parameter);
-		generator.dispose();
-		
-		//Skin Generation
-		skin = createBasicSkin(font);
+		//Menu Creation
+		menu = new MenuManager(view);
 		
 		//Game Title
-		Label title = new Label("Clumsy Swordsman", skin);
-		
+		menu.setCellPadding(20);
+		menu.addLabel("Clumsy Swordsman");
+		menu.setCellPadding(5);
+		menu.row();
 		//Buttons
-		TextButton play = new TextButton("Play", skin);
-		TextButton fullscreen = new TextButton("Full", skin);
-		TextButton exit = new TextButton("Exit", skin);
 		
-		buttons = new TextButton[3];
-		buttons[0] = play;
-		buttons[1] = fullscreen;
-		buttons[2] = exit;
-		
-		
-		table.add(title);
-		table.row();
-		table.add(play).padBottom(50).padTop(200);
-		table.row();
-		table.add(fullscreen).padBottom(50);
-		table.row();
-		table.add(exit);
-		
-		play.addListener(new ClickListener(){
+		//Play Button
+		TextButton play = menu.addTextButton("Play");
+		play.addListener(new ChangeListener(){
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+			public void changed(ChangeEvent event, Actor actor) {
 				startGame();
 			}
 		});
+		menu.row();
 		
-		stage.addActor(table);
+		//FullScreen Button
+		final TextButton fullscreen = menu.addTextButton("Full");
+		fullscreen.addListener(new ChangeListener(){
+			
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if(!Gdx.graphics.isFullscreen()){
+					Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+					fullscreen.setText("Windowed");
+				}else{
+					Gdx.graphics.setWindowedMode(600, 600);
+					fullscreen.setText("Full");
+				}
+			}
+			
+		});
+		menu.row();
 		
-		timer = new Timer();
-		beep = Gdx.audio.newSound(Constants.BEEP);
+		//Quit Button
+		TextButton quit = menu.addTextButton("Quit");
+		quit.addListener(new ChangeListener(){
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.exit();
+			}
+			
+		});
 	}
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -119,19 +87,13 @@ public class MainMenuScreen implements Screen{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-        //Adjust Menu Position
-        if(checkController()){
-            adjustMenu();
-        }
-
-        stage.act(delta);
-        stage.draw();
+        menu.render(delta);
         
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().update(width, height);
+		menu.resize(width, height);
 		
 	}
 
@@ -155,122 +117,13 @@ public class MainMenuScreen implements Screen{
 
 	@Override
 	public void dispose() {
-		stage.dispose();
-		font.dispose();
-		beep.dispose();
+		
 	}
 	
-	private Skin createBasicSkin(BitmapFont font){
-		Skin skin = new Skin();
-		skin.add("default", font);
-		
-		Pixmap pixmap = new Pixmap((int)Constants.V_WIDTH/4, (int)Constants.V_HEIGHT/10, Pixmap.Format.RGB888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fill();
-		skin.add("background", new Texture(pixmap));
-		
-		TextButton.TextButtonStyle textStyle = new TextButton.TextButtonStyle();
-		textStyle.up = skin.newDrawable("background", Color.GRAY);
-		textStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-		textStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
-		textStyle.font = skin.getFont("default");
-		skin.add("default", textStyle);
-		
-		Label.LabelStyle labelStyle = new LabelStyle(font, Color.BLACK);
-		skin.add("default", labelStyle);
-		
-		return skin;
-	}
 	
 	private void startGame(){
 		this.dispose();
 		game.setScreen(new SelectScreen(game));
 	}
 	
-	private boolean checkController(){
-		
-		if(checkControllers){
-			
-			for(Controller controller : Controllers.getControllers()){
-				
-				
-				// If select button is pressed
-				if(controller.getButton(0)){
-					
-					if(menuPosition == 0){
-						startGame();
-					}else if(menuPosition == 1){
-						if(!Gdx.graphics.isFullscreen()){
-							Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-							buttons[menuPosition].setText("Windowed");
-						}else{
-							Gdx.graphics.setWindowedMode(800, 800);
-							buttons[menuPosition].setText("Full");
-						}
-					}else if(menuPosition == 2){
-						Gdx.app.exit();
-					}
-				}
-				
-				
-				//Checks if the button should be adjusted and changes the menu position 
-				if(controller.getAxis(0) > .5f){
-					
-					++menuPosition;
-					beep.play();
-					
-					if(menuPosition >= buttons.length){
-						menuPosition = 0;
-					}
-					
-					checkControllers = false;
-					timer.scheduleTask(new Task(){
-						
-						@Override
-						public void run() {
-							checkControllers = true;
-						}
-					}, .35f);
-					
-					return true;
-					
-				}else if(controller.getAxis(0) < -.5f){
-					
-					--menuPosition;
-					beep.play();
-					
-					if(menuPosition < 0){
-						menuPosition = buttons.length - 1;
-					}
-					
-					checkControllers = false;
-					timer.scheduleTask(new Task(){
-						
-						@Override
-						public void run() {
-							checkControllers = true;
-						}
-					}, .35f);
-					
-					return true;
-				}
-				
-			}
-			
-			return false;
-		}
-		
-		return false;
-		
-	}
-
-	private void adjustMenu(){
-		for(int i = 0; i < buttons.length; ++i){
-			if(menuPosition == i){
-				buttons[i].setColor(Color.DARK_GRAY);
-			}else{
-				buttons[i].setColor(Color.GRAY);
-			}
-		}
-	}
 }

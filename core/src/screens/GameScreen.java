@@ -14,9 +14,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MagnetGame;
 
 import Worlds.GameWorld;
+import modes.DeathMatch;
 import modes.GameOptions;
-import modes.LastManStanding;
 import utils.Constants;
+import utils.MapUtils;
 
 public class GameScreen implements Screen{
 
@@ -49,8 +50,8 @@ public class GameScreen implements Screen{
 		
 		camera.update();
 		
-		world = new GameWorld(new LastManStanding(game, new GameOptions()), camera, Constants.loadMap(MathUtils.random((Constants.MAP_COUNT - 1)) + 1));
-		world.addPlayers(controllers);
+		world = new GameWorld(new DeathMatch(game, new GameOptions(10)), camera, MapUtils.loadMap(MathUtils.random((MapUtils.MAP_COUNT - 1)) + 1));
+		world.addAllPlayers(controllers);
 		
 	}
 	

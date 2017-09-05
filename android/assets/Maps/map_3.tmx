@@ -2,6 +2,11 @@
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="86">
  <tileset firstgid="1" name="s" tilewidth="16" tileheight="16" spacing="4" margin="2" tilecount="8" columns="4">
   <image source="Map Textures/s.png" width="80" height="40"/>
+  <tile id="0">
+   <properties>
+    <property name="index" type="int" value="3"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Floor" width="20" height="20">
   <data encoding="csv">
@@ -11,14 +16,14 @@
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
-2,7,7,7,7,7,5,1,1,1,1,1,1,1,6,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,2,0,0,0,0,0,0,0,2,7,7,7,7,2,
-2,7,7,7,7,7,3,1,1,1,1,1,1,1,8,7,7,7,7,2,
+2,7,7,7,7,7,5,6,7,7,7,7,5,6,7,7,7,7,7,2,
+2,7,7,7,7,7,3,8,7,7,7,7,3,8,7,7,7,7,7,2,
+2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
+2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
+2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
+2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
+2,7,7,7,7,7,5,6,7,7,7,7,5,6,7,7,7,7,7,2,
+2,7,7,7,7,7,3,8,7,7,7,7,3,8,7,7,7,7,7,2,
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
 2,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,
@@ -28,22 +33,22 @@
 </data>
  </layer>
  <objectgroup name="Spawns">
-  <object id="80" x="32" y="32" width="16" height="16">
+  <object id="77" x="48" y="48" width="16" height="16">
    <properties>
     <property name="index" type="int" value="0"/>
    </properties>
   </object>
-  <object id="82" x="272" y="32" width="16" height="16">
+  <object id="78" x="256" y="48" width="16" height="16">
    <properties>
     <property name="index" type="int" value="2"/>
    </properties>
   </object>
-  <object id="83" x="272" y="272" width="16" height="16">
+  <object id="79" x="256" y="256" width="16" height="16">
    <properties>
     <property name="index" type="int" value="1"/>
    </properties>
   </object>
-  <object id="84" x="32" y="272" width="16" height="16">
+  <object id="80" x="48" y="256" width="16" height="16">
    <properties>
     <property name="index" type="int" value="3"/>
    </properties>
@@ -54,6 +59,9 @@
   <object id="74" x="0" y="304" width="320" height="16"/>
   <object id="75" x="0" y="16" width="16" height="288"/>
   <object id="76" x="304" y="16" width="16" height="288"/>
-  <object id="77" x="96" y="96" width="144" height="128"/>
+  <object id="81" x="96" y="96" width="32" height="32"/>
+  <object id="82" x="192" y="96" width="32" height="32"/>
+  <object id="83" x="192" y="192" width="32" height="32"/>
+  <object id="84" x="96" y="192" width="32" height="32"/>
  </objectgroup>
 </map>

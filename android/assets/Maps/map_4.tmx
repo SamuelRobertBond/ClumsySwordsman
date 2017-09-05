@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" nextobjectid="83">
+ <tileset firstgid="1" name="s" tilewidth="16" tileheight="16" spacing="4" margin="2" tilecount="8" columns="4">
+  <image source="Map Textures/s.png" width="80" height="40"/>
+  <tile id="0">
+   <properties>
+    <property name="index" type="int" value="3"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Floor" width="20" height="20">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,5,1,1,1,1,1,1,1,1,1,1,1,1,6,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,2,7,7,7,7,7,7,7,7,7,7,7,7,2,0,0,0,
+0,0,0,3,1,1,1,1,1,1,1,1,1,1,1,1,8,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="Spawns">
+  <object id="77" x="80" y="80" width="16" height="16">
+   <properties>
+    <property name="index" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="78" x="224" y="80" width="16" height="16">
+   <properties>
+    <property name="index" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="79" x="224" y="224" width="16" height="16">
+   <properties>
+    <property name="index" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="80" x="80" y="224" width="16" height="16">
+   <properties>
+    <property name="index" type="int" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Walls">
+  <object id="73" x="48" y="48" width="224" height="16"/>
+  <object id="74" x="48" y="256" width="224" height="16"/>
+  <object id="75" x="48" y="64" width="16" height="192"/>
+  <object id="76" x="256" y="64" width="16" height="192"/>
+ </objectgroup>
+</map>

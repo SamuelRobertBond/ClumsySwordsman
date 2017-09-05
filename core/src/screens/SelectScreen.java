@@ -36,6 +36,7 @@ import modes.GameMode;
 import modes.GameOptions;
 import modes.SelectMode;
 import utils.Constants;
+import utils.MapUtils;
 
 public class SelectScreen implements Screen{
 	
@@ -53,7 +54,6 @@ public class SelectScreen implements Screen{
 	private LinkedList<Controller> controllers;
 	private OrthographicCamera camera;
 	private GameWorld world;
-	private LinkedList<Player> players;
 	private FitViewport view;
 	
 	//text
@@ -76,10 +76,9 @@ public class SelectScreen implements Screen{
 		
 		camera.update();
 		
-		Constants.loadMap(0);
+		MapUtils.loadMap(0);
 		
-		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, Constants.loadMap(0));
-		players = new LinkedList<Player>();
+		world = new GameWorld(new SelectMode(game, new GameOptions()), camera, MapUtils.loadMap(0));
 		controllers = new LinkedList<Controller>();
 		
 		sound = Gdx.audio.newSound(Constants.BEEP_JOIN);
@@ -123,6 +122,15 @@ public class SelectScreen implements Screen{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
+        boolean exitPressed = false;
+        
+        for(int i = 0; i < Controllers.getControllers().size; ++i){
+        	Controller controller = Controllers.getControllers().get(i);
+        	if(controller.getButton(1)){
+        		exitPressed = true;
+        	}
+        }
+        
         world.update(delta);
         checkControllers();
         startGame();
@@ -135,6 +143,11 @@ public class SelectScreen implements Screen{
         
         stage.act(delta);
         stage.draw();
+        
+        if(exitPressed){
+        	dispose();
+        	game.setScreen(new MainMenuScreen(game));
+        }
         
 	}
 

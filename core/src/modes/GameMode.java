@@ -17,7 +17,7 @@ import utils.Constants;
 
 public class GameMode{
 
-	private GameOptions options;
+	protected GameOptions options;
 	protected int highestScore;
 	
 	protected ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
@@ -59,13 +59,15 @@ public class GameMode{
 	}
 
 	public void addScore(ImmutableArray<Entity> entities) {
-		
+		//Overridden in children
 	}
 
 
 	public boolean endGame() {
 		
-		if(highestScore >= options.rounds){
+		if(highestScore >= options.score){
+			
+			Gdx.app.log("Game Mode - endGame()", "Ending Game");
 			
 			Timer timer = new Timer();
 			timer.scheduleTask(new Task(){

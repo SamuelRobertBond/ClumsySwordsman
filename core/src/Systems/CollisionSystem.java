@@ -54,6 +54,8 @@ public class CollisionSystem extends EntitySystem implements ContactListener{
 				BodyComponent bc1 = bm.get(a);
 				BodyComponent bc2 = bm.get(b);
 				
+				ScoreComponent sc = sm.get(a);
+				
 				VelocityComponent vp = vm.get(a);
 				
 				//Check if the collision was between a body and sword
@@ -64,6 +66,8 @@ public class CollisionSystem extends EntitySystem implements ContactListener{
 						
 						if(vp.alive != false){
 							vp.alive = false;
+							sc.kills++;
+							
 							RotationComponent rc = rm.get(b);
 							
 							if(rc.weldJoint != null){
