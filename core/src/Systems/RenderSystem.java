@@ -105,7 +105,10 @@ public class RenderSystem extends EntitySystem{
 			
 			//Player Sprite
 			sc.playerSprite.setPosition(bc.body.getPosition().x - sc.playerSprite.getWidth()/2, bc.body.getPosition().y - sc.playerSprite.getHeight()/2);
-			sc.playerSprite.setRotation(bc.sword.getAngle() * MathUtils.radiansToDegrees);
+			
+			if(bc.swordFixture != null){
+				sc.playerSprite.setRotation( bc.sword.getAngle() * MathUtils.radiansToDegrees);
+			}
 			
 			//Draw
 			sc.playerSprite.draw(batch);
